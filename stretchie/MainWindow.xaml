@@ -1,0 +1,151 @@
+﻿<Window x:Class="stretchie.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:stretchie"
+        mc:Ignorable="d"
+        Title="Hourly Stretch Reminder" Height="400" Width="600"
+        WindowStartupLocation="CenterScreen" Background="#F4F6F9"
+        Icon="/assets/icon.ico">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <!-- Left Side Menu Column -->
+            <ColumnDefinition Width="160"/>
+            <!-- Main Content Area Column -->
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Border Grid.Column="0" Background="#2C3E50" Padding="15">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- App Brand Header -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,30">
+                    <TextBlock Text="STRETCH" Foreground="White" FontSize="20" FontWeight="Black" HorizontalAlignment="Center"/>
+                    <TextBlock Text="REMINDER" Foreground="#3498DB" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <!-- Nav Buttons -->
+                <StackPanel Grid.Row="1">
+                    <Button x:Name="BtnNavTimer" Content="⏱ Timer" Height="40" Margin="0,5" Background="Transparent" Foreground="White" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" FontSize="14" FontWeight="SemiBold" Click="BtnNavTimer_Click" Cursor="Hand"/>
+                    <Button x:Name="BtnNavSettings" Content="⚙ Settings" Height="40" Margin="0,5" Background="Transparent" Foreground="White" BorderThickness="0" HorizontalContentAlignment="Left" Padding="15,0,0,0" FontSize="14" FontWeight="SemiBold" Click="BtnNavSettings_Click" Cursor="Hand"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Text="v1.1.0 Status: Running" Foreground="#7F8C8D" FontSize="10" HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
+        <Grid Grid.Column="1" Margin="20">
+            <!-- VIEW 1: COUNTDOWN TIMER VIEW -->
+            <Grid x:Name="ViewCountdown" Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="TxtStatus" Text="Time until next stretch:" FontSize="16" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                <Border Grid.Row="1" CornerRadius="12" Padding="20" Background="White" VerticalAlignment="Center">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="2" Opacity="0.1"/>
+                    </Border.Effect>
+                    <TextBlock x:Name="TxtTimer" Text="60:00" FontSize="64" FontWeight="Black" Foreground="#2980B9" HorizontalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="BtnPause" Content="Pause Timer" Width="120" Height="40" Background="#D35400" Foreground="White" FontWeight="Bold" Click="BtnPause_Click" Margin="0,0,10,0" Cursor="Hand"/>
+                    <Button x:Name="BtnSkip" Content="Skip Cycle" Width="120" Height="40" Background="#7F8C8D" Foreground="White" FontWeight="Bold" Click="BtnSkip_Click" Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- ROUTINE MODE UI -->
+            <Grid x:Name="GridRoutine" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="TxtRoutineProgress" Text="Stretch 1 of 3" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="#7F8C8D"/>
+
+                <Border Grid.Row="1" CornerRadius="12" Padding="20" Background="White" VerticalAlignment="Center" MinHeight="160">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="2" Opacity="0.1"/>
+                    </Border.Effect>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtStretchName" Text="Chin Tucks" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock x:Name="TxtStretchInstruction" Text="Perform 5 reps" FontSize="20" Foreground="#E67E22" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock x:Name="TxtRoutineTimer" Text="10s" FontSize="40" FontWeight="Black" Foreground="#C0392B" HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Border>
+
+                <Button x:Name="BtnNextStep" Content="Next Step" Grid.Row="2" Width="160" Height="45" Background="#27AE60" Foreground="White" FontWeight="Bold" FontSize="16" Click="BtnNextStep_Click" Cursor="Hand"/>
+            </Grid>
+            <!-- VIEW 3: SETTINGS VIEW -->
+            <Grid x:Name="ViewSettings" Visibility="Collapsed">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <TextBlock Text="Application Settings" FontSize="22" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,20"/>
+
+                        <!-- Timer Configuration Panel -->
+                        <TextBlock Text="Interval Timer (Minutes)" FontSize="14" FontWeight="Bold" Foreground="#34495E"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,20">
+                            <TextBox x:Name="TxtInputMinutes" Text="60" Width="80" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                            <Button x:Name="BtnSaveTimer" Content="Save Timer" Width="100" Height="30" Margin="10,0,0,0" Background="#2980B9" Foreground="White" FontWeight="Bold" Click="BtnSaveTimer_Click"/>
+                        </StackPanel>
+
+                        <Separator Margin="0,0,0,20"/>
+                        
+                        <TextBlock Text="Current Routine Stretches" FontSize="16" FontWeight="Bold" Foreground="#2C3E50" Margin="0,10,0,5"/>
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Display list of currently saved exercises -->
+                            <ListBox x:Name="LstExercises" Grid.Column="0" Height="120" DisplayMemberPath="Name" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+                            <Button x:Name="BtnDeleteExercise" Content="❌ Delete" Grid.Column="1" Width="90" Height="40" 
+                                Margin="10,0,0,0" Background="#C0392B" Foreground="White" FontWeight="Bold" 
+                                VerticalAlignment="Top" Click="BtnDeleteExercise_Click" Cursor="Hand"/>
+                        </Grid>
+
+                        <Separator Margin="0,0,0,20"/>
+
+                        <!-- Add Exercise Panel -->
+                        <TextBlock Text="Add Custom Exercise" FontSize="16" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Exercise Name:" FontSize="12" Margin="0,5,0,2"/>
+                        <TextBox x:Name="TxtNewExerciseName" Height="30" VerticalContentAlignment="Center"/>
+
+                        <TextBlock Text="Type:" FontSize="12" Margin="0,10,0,2"/>
+                        <ComboBox x:Name="CmbNewExerciseType" Height="30" SelectedIndex="0">
+                            <ComboBoxItem Content="Repetition Based"/>
+                            <ComboBoxItem Content="Timed Hold Based"/>
+                        </ComboBox>
+
+                        <Grid Margin="0,10,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                <TextBlock Text="Target (Reps / Sets):" FontSize="12"/>
+                                <TextBox x:Name="TxtNewExerciseTarget" Text="5" Height="30" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="Hold Duration (Seconds):" FontSize="12"/>
+                                <TextBox x:Name="TxtNewExerciseDuration" Text="10" Height="30" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Button x:Name="BtnAddExercise" Content="➕ Add to Routine List" Height="40" Background="#27AE60" Foreground="White" FontWeight="Bold" FontSize="14" Click="BtnAddExercise_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
